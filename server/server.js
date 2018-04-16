@@ -11,9 +11,10 @@ app.use('/', express.static(path.join(__dirname, '../client/public')));
 app.use('/', bodyParser.json());
 
 app.get('/images', function(req, res){
-  axios(`https://api.gettyimages.com/v3/search/images?phrase=books`, {
+  axios(`https://api.gettyimages.com/v3/search/images?fields=id,title,thumb,comp,referral_destinations&sort_order=best&phrase=cat
+`, {
     headers: {
-      'Api-Key': 'bunqqkbd76f6sc76axwbrwvn'
+      'Api-Key': req.query.api
     }
   })
   .then((response) => {
