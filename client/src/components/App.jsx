@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
+import API_KEY from './../../../config/keys.js';
 import Search from './Search.jsx';
+import AllResults from './AllResults.jsx'
 
 class App extends React.Component {
   constructor(props){
@@ -9,19 +11,19 @@ class App extends React.Component {
       images: []
     }
   }
-  
+
   handleStateChange(state, property){
-    this.setState({[state]:property})
+    this.setState({[state]:property});
   }
 
   fetchImages(){
-    axios.get('/images')
+    axios.get('/images', {params:{api:API_KEY}})
     .then((response) => {
-      console.log(response)
-      this.handleStateChange('images', response.data)
+      console.log(response);
+      this.handleStateChange('images', response.data);
     })
     .catch((error) => {
-      console.log(error)
+      console.log(error);
     })
   }
 
@@ -29,7 +31,10 @@ class App extends React.Component {
 
   render(){
     return (
-      <Search fetchImages={this.fetchImages.bind(this)}/>
+      <div>
+        <Search fetchImages={this.fetchImages.bind(this)}/>
+        <AllResults images={this.state.images} />
+      </div>
     )
   }
 }
