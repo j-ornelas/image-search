@@ -27,7 +27,9 @@
     "express": "^4.16.2",
     "jQuery": "^1.7.4",
     "react": "^16.1.0",
+    "react-awesome-modal": "^2.0.3",
     "react-dom": "^16.1.0",
+    "react-modal-image": "^2.1.4",
     "webpack": "^3.8.1"
   },
   "bugs": {
