@@ -8,7 +8,10 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      images: []
+      images: [],
+      searchTerms: 'ceku',
+      lastSearched: null,
+      lastSpellChecked: null
     }
   }
 
@@ -16,23 +19,36 @@ class App extends React.Component {
     this.setState({[state]:property});
   }
 
+  handleSearchChange(event){
+    this.setState({searchTerms:event.target.value})
+  }
+
   fetchImages(){
-    axios.get('/images', {params:{api:API_KEY}})
+    axios.get('/images', {
+      params:{
+        api:API_KEY,
+        q:this.state.searchTerms
+      }})
     .then((response) => {
       console.log(response);
-      this.handleStateChange('images', response.data);
+      this.setState({images: response.data.images});
+      this.setState({lastSpellChecked: response.data.spellCheckedQuery});
+      this.setState({lastSearched: this.state.searchTerms});
     })
     .catch((error) => {
       console.log(error);
     })
   }
 
-
-
   render(){
     return (
       <div>
-        <Search fetchImages={this.fetchImages.bind(this)}/>
+        <Search
+          handleSearchChange={this.handleSearchChange.bind(this)}
+          lastSearched={this.state.lastSearched}
+          lastSpellChecked={this.state.lastSpellChecked}
+          fetchImages={this.fetchImages.bind(this)}
+        />
         <AllResults images={this.state.images} />
       </div>
     )
