@@ -19,3 +19,14 @@ body {
   vertical-align: center;
   line-height: 0;
 }
+
+.spell-check-override-text {
+  text-align: center;
+}
+
+.spell-check-override-link {
+  cursor: pointer;
+  color: #4db6ac;
+  text-decoration: underline;
+  font-weight: bold;
+}
