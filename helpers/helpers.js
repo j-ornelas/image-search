@@ -1,66 +1,63 @@
-const dictionary = require('./../server/words_dictionary.js');
+// see Tests/helpers.test.js
 
-const spellCheck = (word) => {
+const formatQuery = (str, dictionary) => {
+  let array = str.toString().split(' ');
+  let newArray = [];
+  array.forEach((element) => {
+    newArray.push(spellCheck(element, dictionary));
+  });
+  return newArray.join('%20');
+};
+
+const spellCheck = (word, dictionary) => {
   const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-  // let wordToCheck = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
   let wordToCheck = '';
   for (var i = 0; i < word.length; i ++){
     if (alphabet.includes(word[i].toLowerCase())){
       wordToCheck += word[i].toLowerCase();
     }
   }
+  return inDictionary(wordToCheck, dictionary);
+};
 
-  return inDictionary(wordToCheck);
-}
-
-var avi = function(word) {
-  const vowels = 'aeiou';
-  let iterations = [];
-  const maxLength = word.length
-
-
-  const recurse = (strSoFar, index) => {
-    if (strSoFar.length === maxLength){
-      iterations.push(strSoFar)
-      return;
-    }
-
-    for (var i = index; i < word.length; i++){
-      if (vowels.includes(word[i])){
-        for (var j = 0; j < vowels.length; j++){
-          recurse(strSoFar + vowels[j], index + 1)
-        }
-      } else {
-        strSoFar += word[i]
-        recurse(strSoFar, ++index)
-      }
-    }
-  }
-
-  recurse("", 0)
-  return iterations
-}
-
-
-
-
-const inDictionary = (word) => {
-  // return dictionary.dictionary[word];
+const inDictionary = (word, dictionary) => {
   // returns the word immediately if it's found in the dictionary
   if (dictionary.dictionary[word]){
-    console.log('found in dictionary', word)
     return word;
   }
-
-  const allIterations = avi(word);
+  const allIterations = allVowelIterations(word);
   for (var i = 0; i < allIterations.length; i++){
     if (dictionary.dictionary[allIterations[i]]){
-      console.log('found in spellcheck', allIterations[i]);
       return allIterations[i];
     }
   }
-  console.log('NOT FOUND IN DICTIONARY')
-}
+};
 
+var allVowelIterations = function(word) {
+  //recursive function to find all vowel iterations
+  // ex: cake - '[caka, cake, caki, cako...cuku]'
+  const vowels = 'aeiou';
+  let iterations = [];
+  const maxLength = word.length;
+  const recurse = (strSoFar, length) => {
+    if (strSoFar.length === maxLength && !iterations.includes(strSoFar)){
+      iterations.push(strSoFar);
+      return;
+    }
+    if (vowels.includes(word[length])){
+      for (var j = 0; j < vowels.length; j++){
+        recurse(strSoFar + vowels[j], strSoFar.length + 1);
+      }
+    } else {
+      strSoFar += word[length];
+      recurse(strSoFar, strSoFar.length);
+    }
+  };
+  recurse("", 0);
+  return iterations;
+};
 
+module.exports.formatQuery = formatQuery;
 module.exports.spellCheck = spellCheck;
+module.exports.allVowelIterations = allVowelIterations;
+module.exports.inDictionary = inDictionary;

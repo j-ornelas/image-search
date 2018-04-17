@@ -6,25 +6,21 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const helpers = require('./../helpers/helpers.js')
+const dictionary = require('./words_dictionary')
 
 app.use('/', express.static(path.join(__dirname, '../client/public')));
 app.use('/', bodyParser.json());
 
 
 app.get('/images', function(req, res){
-  let query = req.query.q
-  let spellChecked = helpers.spellCheck(query)
+  let originalQuery = JSON.stringify(req.query.q)
+  let spellCheckedQuery = helpers.formatQuery(originalQuery, dictionary)
   let toSearch;
   if (JSON.parse(req.query.autoCorrectOverride)){
-    toSearch = query
+    toSearch = originalQuery
   } else {
-    toSearch = spellChecked
+    toSearch = spellCheckedQuery
   }
-  // console.log(req.query.autoCorrectOverride)
-  // console.log('toSearch', toSearch)
-  // console.log('query', query)
-  // console.log('spellChecked', spellChecked)
-  console.log(req.query.imagesNum)
   let urlBase = `https://api.gettyimages.com/v3/search/images`;
   let urlQuery = `?fields=title,preview,comp&sort_order=best&phrase=${toSearch}&page=1&page_size=${req.query.imagesNum}`;
   axios.get(urlBase + urlQuery, {
@@ -35,8 +31,8 @@ app.get('/images', function(req, res){
   .then((response) => {
     let queryResponse = {
       images: response.data.images,
-      query: query,
-      spellCheckedQuery: spellChecked
+      query: originalQuery,
+      spellCheckedQuery: spellCheckedQuery.split('%20').join(" ")
     }
     res.send(queryResponse)
   })
@@ -44,6 +40,5 @@ app.get('/images', function(req, res){
     console.log(error)
   })
 });
-
 
 app.listen(port, () => console.log(`${title} listening on port ${port}!`));
