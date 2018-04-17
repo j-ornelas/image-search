@@ -14,7 +14,17 @@ app.use('/', bodyParser.json());
 app.get('/images', function(req, res){
   let query = req.query.q
   let spellChecked = helpers.spellCheck(query)
-  let url = `https://api.gettyimages.com/v3/search/images?fields=title,thumb,comp&sort_order=best&phrase=${spellChecked}`
+  let toSearch;
+  if (JSON.parse(req.query.autoCorrectOverride)){
+    toSearch = query
+  } else {
+    toSearch = spellChecked
+  }
+  console.log(req.query.autoCorrectOverride)
+  console.log('toSearch', toSearch)
+  console.log('query', query)
+  console.log('spellChecked', spellChecked)
+  let url = `https://api.gettyimages.com/v3/search/images?fields=title,preview,comp&sort_order=best&phrase=${toSearch}`
   axios.get(url, {
     headers: {
       'Api-Key': req.query.api
