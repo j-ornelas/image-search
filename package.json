@@ -9,7 +9,7 @@
     "server:production": "node ./server/server.js",
     "react:dev": "webpack -d --watch ",
     "react:production": "webpack -p",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -35,5 +35,8 @@
   "bugs": {
     "url": "https://github.com/j-ornelas/image-search/issues"
   },
-  "homepage": "https://github.com/j-ornelas/image-search#readme"
+  "homepage": "https://github.com/j-ornelas/image-search#readme",
+  "devDependencies": {
+    "jest": "^22.4.2"
+  }
 }
