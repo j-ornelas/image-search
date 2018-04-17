@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import API_KEY from './../../../config/keys.js';
 import Search from './Search.jsx';
+import Modal from 'react-awesome-modal';
 import AllResults from './AllResults.jsx'
 
 class App extends React.Component {
@@ -9,25 +10,25 @@ class App extends React.Component {
     super(props);
     this.state = {
       images: [],
-      searchTerms: 'ceku',
+      searchTerms: '',
       lastSearched: null,
       lastSpellChecked: null
     }
   }
 
-  handleStateChange(state, property){
-    this.setState({[state]:property});
+  toggleModal(){
+    this.setState({visible: !this.state.visible});
   }
-
   handleSearchChange(event){
     this.setState({searchTerms:event.target.value})
   }
 
-  fetchImages(){
+  fetchImages(override){
     axios.get('/images', {
       params:{
         api:API_KEY,
-        q:this.state.searchTerms
+        q:this.state.searchTerms,
+        autoCorrectOverride:override
       }})
     .then((response) => {
       console.log(response);
