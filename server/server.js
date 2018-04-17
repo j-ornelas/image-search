@@ -20,12 +20,14 @@ app.get('/images', function(req, res){
   } else {
     toSearch = spellChecked
   }
-  console.log(req.query.autoCorrectOverride)
-  console.log('toSearch', toSearch)
-  console.log('query', query)
-  console.log('spellChecked', spellChecked)
-  let url = `https://api.gettyimages.com/v3/search/images?fields=title,preview,comp&sort_order=best&phrase=${toSearch}`
-  axios.get(url, {
+  // console.log(req.query.autoCorrectOverride)
+  // console.log('toSearch', toSearch)
+  // console.log('query', query)
+  // console.log('spellChecked', spellChecked)
+  console.log(req.query.imagesNum)
+  let urlBase = `https://api.gettyimages.com/v3/search/images`;
+  let urlQuery = `?fields=title,preview,comp&sort_order=best&phrase=${toSearch}&page=1&page_size=${req.query.imagesNum}`;
+  axios.get(urlBase + urlQuery, {
     headers: {
       'Api-Key': req.query.api
     }
