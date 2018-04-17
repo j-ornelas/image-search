@@ -6,6 +6,6 @@ export default function AllResults (props){
     <Result key={index} image={image} />
   )
   return (
-    <div>{mappedResults}</div>
+    <div className="image-container">{mappedResults}</div>
   )
 };
