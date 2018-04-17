@@ -1,8 +1,18 @@
 import React from 'react';
+import ModalImage from 'react-modal-image'
 
 
 export default function Result (props){
   return (
-    <div><img src={props.image.display_sizes[1].uri} /></div>
+    <span className="results col s12 m4 l2 image">
+    <ModalImage
+      className="image"
+      small={props.image.display_sizes[1].uri}
+      large={props.image.display_sizes[0].uri}
+      alt={props.image.title}
+      />
+    </span>
+
+
   )
 };
