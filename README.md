@@ -1,5 +1,6 @@
 # Image-Search
-A minimalist React/Express image search application using Getty Images feat: spellcheck & infinite scroll.
+A minimalist and responsive React/Express image search application using Getty Images feat: spellcheck & infinite scroll.
+
 ![alt text](https://i.imgur.com/DIpu9fo.jpg)
 
 ## To run locally:
